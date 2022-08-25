@@ -1,7 +1,0 @@
-{
-  //절대경로 설정하기 absolute import
-  "compilerOptions": {
-    "baseUrl": "src"
-  },
-  "include": ["src"]
-}

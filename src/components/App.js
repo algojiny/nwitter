@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import AppRouter from "components/Router";
-import fbase from "fbase";
+import AppRouter from "../components/Router";
+import fbase from "../fbase";
 
 function App() {
   console.log(fbase.currentUser);
