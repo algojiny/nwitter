@@ -1,10 +1,5 @@
 import { async } from "@firebase/util";
-import {
-  addDoc,
-  collection,
-  getDocs,
-  serverTimestamp,
-} from "firebase/firestore";
+import { addDoc, collection, getDocs, serverTimestamp } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { db } from "../fbase";
 
@@ -14,7 +9,11 @@ const Home = () => {
   const getNweets = async () => {
     const dbNweets = await getDocs(collection(db, "nweets"));
     dbNweets.forEach((doc) => {
-      console.log(doc.data());
+      const nweetObj = {
+        ...doc.data(),
+        id: doc.id,
+      };
+      setNweets((prev) => [nweetObj, ...prev]);
     });
   };
   useEffect(() => {
@@ -35,19 +34,21 @@ const Home = () => {
     } = e;
     setNweet(value);
   };
+  console.log(nweets);
 
   return (
     <div>
       <form onSubmit={onSubmit}>
-        <input
-          value={nweet}
-          onChange={onChange}
-          type="text"
-          placeholder="What's on your mind?"
-          maxLength={120}
-        />
+        <input value={nweet} onChange={onChange} type="text" placeholder="What's on your mind?" maxLength={120} />
         <input type="submit" value="Nweet" />
       </form>
+      <div>
+        {nweets.map((nweet, id) => (
+          <div key={id}>
+            <h4>{nweet.nweet}</h4>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
