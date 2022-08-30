@@ -15,6 +15,7 @@ const Home = ({ userObj }) => {
   const [nweets, setNweets] = useState([]);
 
   useEffect(() => {
+    //스냅샷은 리스너(관찰자)로 변화를 감지, 새로운 스냅샷을 받을때 배열을 만들고 nweets state에 넣음
     const q = query(collection(db, "nweets"), orderBy("createdAt", "desc"));
     onSnapshot(q, (snapshot) => {
       const nweetArray = snapshot.docs.map((doc) => ({
@@ -22,7 +23,6 @@ const Home = ({ userObj }) => {
         ...doc.data(),
       }));
       setNweets(nweetArray);
-      console.log(nweets);
     });
   }, []);
   const onSubmit = async (e) => {
