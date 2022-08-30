@@ -2,6 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -20,4 +21,5 @@ const app = initializeApp(firebaseConfig);
 // 버전 9부터 auth 는 요런식으로 가져와야 합니다.
 const authService = getAuth(app);
 export const db = getFirestore(app);
+export const storageService = getStorage(app);
 export default authService;

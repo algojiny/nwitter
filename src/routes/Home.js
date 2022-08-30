@@ -6,9 +6,11 @@ import {
   query,
   serverTimestamp,
 } from "firebase/firestore";
+import { ref } from "firebase/storage";
 import React, { useEffect, useRef, useState } from "react";
 import Nweet from "../components/Nweet";
-import { db } from "../fbase";
+import { db, storageService } from "../fbase";
+// import { uuid } from "uuidv4";
 
 const Home = ({ userObj }) => {
   const [nweet, setNweet] = useState("");
@@ -28,13 +30,19 @@ const Home = ({ userObj }) => {
   }, []);
   const onSubmit = async (e) => {
     e.preventDefault();
-    if (nweet !== "")
-      await addDoc(collection(db, "nweets"), {
-        text: nweet,
-        createdAt: serverTimestamp(),
-        creatorId: userObj.uid,
-      });
-    setNweet("");
+    const fileRef = ref(storageService, `${userObj.uid}/${uuid}`);
+    const respons = await uploadString(fileRef, attachment, "data_url").then(
+      (snapshot) => {
+        console.log("Uploaded a data_url string!");
+      }
+    );
+    // if (nweet !== "")
+    //   await addDoc(collection(db, "nweets"), {
+    //     text: nweet,
+    //     createdAt: serverTimestamp(),
+    //     creatorId: userObj.uid,
+    //   });
+    // setNweet("");
   };
   const onChange = (e) => {
     const {
