@@ -1,7 +1,6 @@
 import {
   addDoc,
   collection,
-  getDocs,
   onSnapshot,
   orderBy,
   query,
