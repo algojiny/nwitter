@@ -6,13 +6,14 @@ import {
   query,
   serverTimestamp,
 } from "firebase/firestore";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Nweet from "../components/Nweet";
 import { db } from "../fbase";
 
 const Home = ({ userObj }) => {
   const [nweet, setNweet] = useState("");
   const [nweets, setNweets] = useState([]);
+  const [attachment, setAttachment] = useState(null);
 
   useEffect(() => {
     //스냅샷은 리스너(관찰자)로 변화를 감지, 새로운 스냅샷을 받을때 배열을 만들고 nweets state에 넣음
@@ -48,10 +49,18 @@ const Home = ({ userObj }) => {
     const theFile = files[0];
     const reader = new FileReader();
     reader.onloadend = (finishedEvent) => {
-      console.log(finishedEvent);
+      const {
+        currentTarget: { result },
+      } = finishedEvent;
+      setAttachment(result);
     };
     reader.readAsDataURL(theFile);
     // console.log(theFile);
+  };
+  const fileInput = useRef();
+  const onClearAttachment = () => {
+    setAttachment(null);
+    fileInput.current.value = null;
   };
   return (
     <div>
@@ -63,8 +72,19 @@ const Home = ({ userObj }) => {
           placeholder="What's on your mind?"
           maxLength={120}
         />
-        <input onChange={onFileChange} type="file" accept="image/*" />
+        <input
+          onChange={onFileChange}
+          type="file"
+          accept="image/*"
+          ref={fileInput}
+        />
         <input type="submit" value="Nweet" />
+        {attachment && (
+          <div>
+            <img src={attachment} width="50px" height="50px" />
+            <button onClick={onClearAttachment}>Clear</button>
+          </div>
+        )}
       </form>
       <div>
         {nweets.map((nweet) => (
