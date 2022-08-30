@@ -1,5 +1,14 @@
-import { addDoc, collection, getDocs, onSnapshot, orderBy, query, serverTimestamp } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  getDocs,
+  onSnapshot,
+  orderBy,
+  query,
+  serverTimestamp,
+} from "firebase/firestore";
 import React, { useEffect, useState } from "react";
+import Nweet from "../components/Nweet";
 import { db } from "../fbase";
 
 const Home = ({ userObj }) => {
@@ -37,14 +46,22 @@ const Home = ({ userObj }) => {
   return (
     <div>
       <form onSubmit={onSubmit}>
-        <input value={nweet} onChange={onChange} type="text" placeholder="What's on your mind?" maxLength={120} />
+        <input
+          value={nweet}
+          onChange={onChange}
+          type="text"
+          placeholder="What's on your mind?"
+          maxLength={120}
+        />
         <input type="submit" value="Nweet" />
       </form>
       <div>
-        {nweets.map((nweet, id) => (
-          <div key={id}>
-            <h4>{nweet.text}</h4>
-          </div>
+        {nweets.map((nweet) => (
+          <Nweet
+            key={nweet.id}
+            nweetObj={nweet}
+            isOwner={nweet.creatorId === userObj.uid}
+          />
         ))}
       </div>
     </div>
