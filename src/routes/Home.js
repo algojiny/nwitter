@@ -6,7 +6,7 @@ import {
   query,
   serverTimestamp,
 } from "firebase/firestore";
-import { ref, uploadString } from "firebase/storage";
+import { getDownloadURL, ref, uploadString } from "firebase/storage";
 import React, { useEffect, useRef, useState } from "react";
 import Nweet from "../components/Nweet";
 import { v4 as uuidv4 } from "uuid";
@@ -30,19 +30,28 @@ const Home = ({ userObj }) => {
   }, []);
   const onSubmit = async (e) => {
     e.preventDefault();
-    const fileRef = ref(storageService, `${userObj.uid}/${uuidv4()}`);
-    const respons = await uploadString(fileRef, attachment, "data_url").then(
-      (snapshot) => {
-        console.log(snapshot);
-      }
-    );
-    // if (nweet !== "")
-    //   await addDoc(collection(db, "nweets"), {
-    //     text: nweet,
-    //     createdAt: serverTimestamp(),
-    //     creatorId: userObj.uid,
-    //   });
-    // setNweet("");
+    let attachmentUrl = "";
+    if (attachmentUrl != "") {
+      //파일참조경로 만들기
+      const attachmentRef = ref(storageService, `${userObj.uid}/${uuidv4()}`);
+      //storage에 참조경로로 파일 업로드
+      const response = await uploadString(
+        attachmentRef,
+        attachment,
+        "data_url"
+      );
+      //storage 참조 경로에 있는 파일의 URL을 다운로드
+      attachmentUrl = await getDownloadURL(response.ref);
+    }
+    const nweetObj = {
+      text: nweet,
+      createdAt: serverTimestamp(),
+      creatorId: userObj.uid,
+      attachmentUrl,
+    };
+    if (nweet !== "") await addDoc(collection(db, "nweets"), nweetObj);
+    setNweet("");
+    setAttachment("");
   };
   const onChange = (e) => {
     const {
