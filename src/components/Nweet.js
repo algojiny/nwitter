@@ -1,6 +1,7 @@
 import { deleteDoc, doc, updateDoc } from "firebase/firestore";
+import { deleteObject, ref } from "firebase/storage";
 import React, { useState } from "react";
-import { db } from "../fbase";
+import { db, storageService } from "../fbase";
 
 const Nweet = ({ nweetObj, isOwner }) => {
   const [edting, setEditing] = useState(false); //edit모드 설정
@@ -8,7 +9,9 @@ const Nweet = ({ nweetObj, isOwner }) => {
   const onDeleteClick = async () => {
     const ok = confirm("Are you sure you want to delete this nweet?");
     if (ok) {
-      await deleteDoc(doc(db, "nweets", nweetObj.id));
+      await deleteDoc(doc(db, "nweets", nweetObj.id)); //firestore에서 뉴윗객체 지우기
+      if (nweetObj.attachmentUrl !== null)
+        await deleteObject(ref(storageService, nweetObj.attachmentUrl)); //storage에서 첨부파일 지우기
     }
   };
   const toggleEditing = () => setEditing((prev) => !prev);

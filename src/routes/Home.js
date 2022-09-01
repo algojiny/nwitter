@@ -32,7 +32,7 @@ const Home = ({ userObj }) => {
     e.preventDefault();
     let attachmentUrl = null;
     //첨부파일이 있으면,
-    if (attachment != null) {
+    if (attachment !== null) {
       //파일참조경로 만들기
       const attachmentRef = ref(storageService, `${userObj.uid}/${uuidv4()}`);
       //storage에 참조경로로 파일 업로드
