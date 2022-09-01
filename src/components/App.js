@@ -8,6 +8,18 @@ function App() {
   useEffect(() => {
     authService.onAuthStateChanged((user) => {
       user ? setUserObj(user) : setUserObj(null);
+      // if (user) {
+      //   if (user.displayName == null) {
+      //     const name = userObj.email.split("@")[0];
+      //     userObj.displayName = name;
+      //   }
+      // }
+
+      // const nickName = user.email.split("@")[0];
+      // setUserObj({
+      //   displayName: user.displayName ? user.displayName : nickName,
+      //   uid: user.uid,
+      // });
       setInit(true);
     });
   }, []);
