@@ -13,9 +13,9 @@ import { v4 as uuidv4 } from "uuid";
 import { db, storageService } from "../fbase";
 
 const Home = ({ userObj }) => {
-  const [nweet, setNweet] = useState("");
-  const [nweets, setNweets] = useState([]);
-  const [attachment, setAttachment] = useState(null);
+  const [nweet, setNweet] = useState(""); //신규뉴윗입력
+  const [nweets, setNweets] = useState([]); //뉴읫목록배열(시간순)
+  const [attachment, setAttachment] = useState(null); //첨부파일여부
 
   useEffect(() => {
     //스냅샷은 리스너(관찰자)로 변화를 감지, 새로운 스냅샷을 받을때 배열을 만들고 nweets state에 넣음
@@ -30,8 +30,9 @@ const Home = ({ userObj }) => {
   }, []);
   const onSubmit = async (e) => {
     e.preventDefault();
-    let attachmentUrl = "";
-    if (attachmentUrl != "") {
+    let attachmentUrl = null;
+    //첨부파일이 있으면,
+    if (attachment != null) {
       //파일참조경로 만들기
       const attachmentRef = ref(storageService, `${userObj.uid}/${uuidv4()}`);
       //storage에 참조경로로 파일 업로드
@@ -43,15 +44,18 @@ const Home = ({ userObj }) => {
       //storage 참조 경로에 있는 파일의 URL을 다운로드
       attachmentUrl = await getDownloadURL(response.ref);
     }
+    //신규뉴윗객체만들기
     const nweetObj = {
       text: nweet,
       createdAt: serverTimestamp(),
       creatorId: userObj.uid,
       attachmentUrl,
     };
-    if (nweet !== "") await addDoc(collection(db, "nweets"), nweetObj);
+    //신규뉴윗 또는 첨부파일이 있으면, 참조 경로에 신규뉴윗객체추가
+    if (nweet !== "" || attachment != null)
+      await addDoc(collection(db, "nweets"), nweetObj);
     setNweet("");
-    setAttachment("");
+    onClearAttachment();
   };
   const onChange = (e) => {
     const {
