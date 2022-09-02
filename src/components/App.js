@@ -9,6 +9,7 @@ function App() {
   useEffect(() => {
     authService.onAuthStateChanged(async (user) => {
       // user ? setUserObj(user) : setUserObj(null);
+      //이메일로 로그인하여 displayName이 없을때 자동으로 만들어서 넣어주기
       if (user) {
         if (user.displayName == null) {
           const name = userObj?.email.split("@")[0];
@@ -16,18 +17,35 @@ function App() {
             displayName: name,
           });
         }
-        setUserObj(user);
+        setUserObj({
+          displayName: user.displayName,
+          uid: user.uid,
+          updateProfile: (args) =>
+            updateProfile(user, { displayName: user.displayName }),
+        });
       } else {
         setUserObj(null);
       }
       setInit(true);
     });
   }, []);
-
+  const refreshUser = () => {
+    const user = authService.currentUser;
+    setUserObj({
+      displayName: user.displayName,
+      uid: user.uid,
+      updateProfile: (args) =>
+        updateProfile(user, { displayName: user.displayName }),
+    });
+  };
   return (
     <>
       {init ? (
-        <AppRouter isLoggedIn={Boolean(userObj)} userObj={userObj} />
+        <AppRouter
+          refreshUser={refreshUser}
+          isLoggedIn={Boolean(userObj)}
+          userObj={userObj}
+        />
       ) : (
         "Initializing..."
       )}
