@@ -11,11 +11,12 @@ function App() {
       // user ? setUserObj(user) : setUserObj(null);
       //이메일로 로그인하여 displayName이 없을때 자동으로 만들어서 넣어주기
       if (user) {
-        if (user.displayName == null) {
-          const name = userObj?.email.split("@")[0];
+        if (user.displayName === null) {
+          const name = user.email.split("@")[0];
           await updateProfile(user, {
             displayName: name,
           });
+          console.log(user.displayName);
         }
         setUserObj({
           displayName: user.displayName,

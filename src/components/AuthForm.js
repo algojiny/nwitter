@@ -3,6 +3,7 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import React, { useState } from "react";
+import authService from "../fbase";
 
 export default function AuthForm() {
   const [newAccount, setNewAccount] = useState(true);
