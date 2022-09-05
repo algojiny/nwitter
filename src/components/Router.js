@@ -1,5 +1,5 @@
 import React from "react";
-import { HashRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Auth from "../routes/Auth";
 import Home from "../routes/Home";
 import Profile from "../routes/Profile";
@@ -7,7 +7,7 @@ import Navigation from "./Navigation";
 
 const AppRouter = ({ refreshUser, isLoggedIn, userObj }) => {
   return (
-    <HashRouter base="/nwitter">
+    <BrowserRouter basename={process.env.PUBLIC_URL}>
       {isLoggedIn && <Navigation userObj={userObj} />}
       <div
         style={{
@@ -40,7 +40,7 @@ const AppRouter = ({ refreshUser, isLoggedIn, userObj }) => {
           )}
         </Routes>
       </div>
-    </HashRouter>
+    </BrowserRouter>
   );
 };
 
