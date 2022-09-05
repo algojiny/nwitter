@@ -40,7 +40,19 @@ function App() {
     });
   };
   return (
-    <>
+    <div
+      style={{
+        maxWidth: 890,
+        width: "100%",
+        margin: "0 auto",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        marginTop: 80,
+        justifyContent: "center",
+        // height: "100vh",
+      }}
+    >
       {init ? (
         <AppRouter
           refreshUser={refreshUser}
@@ -50,8 +62,10 @@ function App() {
       ) : (
         "Initializing..."
       )}
-      <footer>&copy; {new Date().getFullYear()} Nwitter</footer>
-    </>
+      <footer style={{ textAlign: "center", marginTop: "30px" }}>
+        &copy; {new Date().getFullYear()} Nwitter
+      </footer>
+    </div>
   );
 }
 
