@@ -124,6 +124,7 @@ form {
   text-align: center;
   border-radius: 20px;
   color: white;
+  cursor: pointer;
 }
 
 .factoryInput__label {
