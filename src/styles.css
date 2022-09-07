@@ -73,13 +73,46 @@ form {
 /* Profile Page */
 
 .profileForm {
+  position: relative;
   border-bottom: 1px solid rgba(255, 255, 255, 0.9);
   padding-bottom: 30px;
   width: 100%;
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
-
+.profilePhoto__attachment {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.profilePhoto__attachment img {
+  height: 80px;
+  width: 80px;
+  border-radius: 40px;
+}
+.profilePhoto__label {
+  position: absolute;
+  height: 80px;
+  width: 80px;
+  border-radius: 40px;
+  cursor: pointer;
+  background-color: #fff;
+  opacity: 0.2;
+}
+.photoNullBox {
+  height: 80px;
+  width: 80px;
+  border-radius: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* cursor: pointer; */
+}
+.profilePhoto__clear {
+  margin: 10px 0;
+  cursor: pointer;
+}
 .logOut {
   margin-top: 50px;
 }

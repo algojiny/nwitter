@@ -1,5 +1,6 @@
 import { updateProfile } from "firebase/auth";
 import React, { useEffect, useState } from "react";
+import { useReducer } from "react";
 import AppRouter from "../components/Router";
 import authService from "../fbase";
 
@@ -8,6 +9,7 @@ function App() {
   const [userObj, setUserObj] = useState(null);
   useEffect(() => {
     authService.onAuthStateChanged(async (user) => {
+      console.log(user);
       // user ? setUserObj(user) : setUserObj(null);
       //이메일로 로그인하여 displayName이 없을때 자동으로 만들어서 넣어주기
       if (user) {
@@ -21,6 +23,7 @@ function App() {
         setUserObj({
           displayName: user.displayName,
           uid: user.uid,
+          photoURL: user.photoURL,
           updateProfile: (args) =>
             updateProfile(user, { displayName: user.displayName }),
         });
@@ -35,6 +38,7 @@ function App() {
     setUserObj({
       displayName: user.displayName,
       uid: user.uid,
+      photoURL: user.photoURL,
       updateProfile: (args) =>
         updateProfile(user, { displayName: user.displayName }),
     });
