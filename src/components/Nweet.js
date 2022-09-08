@@ -3,7 +3,11 @@ import { deleteObject, ref } from "firebase/storage";
 import React, { useState } from "react";
 import { db, storageService } from "../fbase";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash, faPencilAlt } from "@fortawesome/free-solid-svg-icons";
+import {
+  faTrash,
+  faPencilAlt,
+  faUser,
+} from "@fortawesome/free-solid-svg-icons";
 
 const Nweet = ({ nweetObj, isOwner }) => {
   const [edting, setEditing] = useState(false); //edit모드 설정
@@ -56,8 +60,17 @@ const Nweet = ({ nweetObj, isOwner }) => {
         </>
       ) : (
         <>
+          {nweetObj.creatorPhoto ? (
+            <img src={nweetObj.creatorPhoto} className="creatorPhoto" />
+          ) : (
+            <div className="creatorPhoto">
+              <FontAwesomeIcon icon={faUser} size="2x" color="#fff" />
+            </div>
+          )}
           <h4>{nweetObj.text}</h4>
-          {nweetObj.attachmentUrl && <img src={nweetObj.attachmentUrl} />}
+          {nweetObj.attachmentUrl && (
+            <img src={nweetObj.attachmentUrl} className="nweetPhoto" />
+          )}
           {isOwner && (
             <div className="nweet__actions">
               <span onClick={onDeleteClick}>

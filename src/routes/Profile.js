@@ -10,10 +10,12 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { signOut, updateProfile } from "firebase/auth";
 import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
+import { getDownloadURL, ref, uploadString } from "firebase/storage";
 import React, { useEffect, useState } from "react";
 import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import authService, { db } from "../fbase";
+import authService, { db, storageService } from "../fbase";
+import { v4 as uuidv4 } from "uuid";
 
 const Profile = ({ refreshUser, userObj }) => {
   const navigate = useNavigate();
@@ -33,21 +35,37 @@ const Profile = ({ refreshUser, userObj }) => {
     //   refreshUser();
     //   console.log(userObj.displayName);
     // }
-
-    //프로필사진을 storage에 저장하기 만들어야함
     if (
       userObj.displayName === newDisplayName &&
       userObj.photoURL === attachment
-    ) {
-      alert("변경된 사항이 없습니다.");
+    )
+      return alert("변경된 사항이 없습니다.");
+
+    //프로필사진을 storage에 저장하기 만들어야함
+    let attachmentUrl = null;
+    //첨부파일이 있으면,
+    if (attachment !== userObj.photoURL) {
+      //파일참조경로 만들기
+      const attachmentRef = ref(storageService, `${userObj.uid}/${uuidv4()}`);
+      //storage에 참조경로로 파일 업로드
+      const response = await uploadString(
+        attachmentRef,
+        attachment,
+        "data_url"
+      );
+      //storage 참조 경로에 있는 파일의 URL을 다운로드
+      attachmentUrl = await getDownloadURL(response.ref);
+      console.log(attachmentUrl);
     } else {
-      await updateProfile(authService.currentUser, {
-        displayName: newDisplayName,
-        photoURL: attachment,
-      });
-      refreshUser();
-      console.log(userObj.displayName);
+      attachmentUrl = userObj.photoURL;
     }
+
+    await updateProfile(authService.currentUser, {
+      displayName: newDisplayName,
+      photoURL: attachmentUrl,
+    });
+    refreshUser();
+    alert("변경 완료 하였습니다.");
   };
   const onLogOutClick = () => {
     signOut(authService);
@@ -81,8 +99,10 @@ const Profile = ({ refreshUser, userObj }) => {
       } = finishedEvent;
       setAttachment(result);
     };
-    reader.readAsDataURL(theFile);
-    // console.log(theFile, userObj.photoURL);
+    console.log(attachment);
+    if (Boolean(theFile)) {
+      reader.readAsDataURL(theFile);
+    }
   };
   const fileInput = useRef();
   const onClearAttachment = () => {

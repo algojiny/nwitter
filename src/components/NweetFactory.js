@@ -31,6 +31,7 @@ export default function NweetFactory({ userObj }) {
       text: nweet,
       createdAt: serverTimestamp(),
       creatorId: userObj.uid,
+      creatorPhoto: userObj.photoURL,
       attachmentUrl,
     };
     //신규뉴윗 또는 첨부파일이 있으면, 참조 경로에 신규뉴윗객체추가
@@ -51,13 +52,15 @@ export default function NweetFactory({ userObj }) {
     } = e;
     const theFile = files[0];
     const reader = new FileReader();
+    //선택한 파일의 정보를 불러오기
+    reader.readAsDataURL(theFile);
+    //이벤트 리스너를 추가하여, 정보 불러오기가 끝나면 파일정보중 url을 result로 저장
     reader.onloadend = (finishedEvent) => {
       const {
         currentTarget: { result },
       } = finishedEvent;
       setAttachment(result);
     };
-    reader.readAsDataURL(theFile);
     // console.log(theFile);
   };
   const fileInput = useRef();

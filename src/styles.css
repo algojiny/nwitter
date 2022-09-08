@@ -218,7 +218,7 @@ form {
   font-size: 14px;
 }
 
-.nweet img {
+.nweet .nweetPhoto {
   right: -10px;
   top: 20px;
   position: absolute;
@@ -226,6 +226,17 @@ form {
   width: 50px;
   height: 50px;
   margin-top: 10px;
+}
+.nweet .creatorPhoto {
+  left: -50px;
+  top: calc(50% - 25px);
+  position: absolute;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .nweet__actions {
